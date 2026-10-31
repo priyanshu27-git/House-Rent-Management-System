@@ -12,15 +12,12 @@ import adminRoutes from "./routes/admin.js";
 import complaintRoutes from "./routes/complaints.js";
 import { initDB } from "./db.js";
 import { seedDB } from "./utils/seed.js";
-import { log } from "console";
 
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-console.log(__filename , __dirname);
 
 
 async function startServer() {
@@ -65,8 +62,10 @@ if (process.env.NODE_ENV !== "production") {
 } else {
   // Production paths (if you build inside the Client/my-react-app folder)
   app.use(express.static(path.join(__dirname, "../Client/my-react-app/dist")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../Client/my-react-app/dist/index.html"));
+  app.get("/{*splat}", (req, res) => {
+    res.sendFile(
+      path.join(__dirname, "../Client/my-react-app/dist/index.html")
+    );
   });
 }
 

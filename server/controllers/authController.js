@@ -38,6 +38,7 @@ export const register = async (req, res) => {
       JWT_SECRET,
       { expiresIn: "7d" }
     );
+    
 
     res.status(201).json({
       token,
