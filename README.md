@@ -42,7 +42,7 @@ The system provides a **modern user interface, secure authentication, and effici
 * React.js
 * React Router
 * Axios
-* Tailwind CSS / Bootstrap
+* Tailwind CSS 
 
 ### Backend
 
@@ -205,37 +205,4 @@ Features:
 
 ---
 
-# 👨‍💻 Team Members
 
-This project is developed by a **team of 4 developers** as part of a full-stack web development project.
-
-Team Roles:
-
-* Frontend Development
-* Backend Development
-* Database Management
-* Integration & Testing
-
----
-
-# 📌 Use Cases
-
-This platform can be used by:
-
-* Tenants looking for rental houses
-* Property owners who want to list their properties
-* Administrators who manage rental platforms
-
----
-
-# 📜 License
-
-This project is developed for **educational and learning purposes**.
-
----
-
-# ⭐ Support
-
-If you like this project, please **give it a star ⭐ on GitHub**.
-
----
