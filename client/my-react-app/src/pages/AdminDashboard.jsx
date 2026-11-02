@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../api";
 import { 
   Users, Home, CheckCircle, XCircle, Clock, 
   Trash2, Shield, Search, Loader2, MapPin 
@@ -18,11 +18,11 @@ const AdminDashboard = () => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
       // 1. Fetch properties with adminMode=true to see Pending + Approved
-      const propsRes = await axios.get("/api/properties?adminMode=true", config);
+      const propsRes = await API.get("/api/properties?adminMode=true", config);
       setProperties(propsRes.data);
       
       // 2. Fetch all users
-      const usersRes = await axios.get("/api/admin/users", config);
+      const usersRes = await API.get("/api/admin/users", config);
       setUsers(usersRes.data);
     } catch (err) {
       console.error("Fetch error", err);
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
   // --- APPROVE PROPERTY ---
   const handleApprove = async (id) => {
     try {
-      await axios.patch(`/api/admin/properties/${id}/approve`, {}, {
+      await API.patch(`/api/admin/properties/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setProperties(properties.map(p => p._id === id ? { ...p, isApproved: true } : p));
@@ -52,7 +52,7 @@ const AdminDashboard = () => {
   const handleDeleteProperty = async (id) => {
     if (!window.confirm("Are you sure you want to delete this property? This will also remove images from storage.")) return;
     try {
-      await axios.delete(`/api/properties/${id}`, {
+      await API.delete(`/api/properties/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setProperties(properties.filter(p => p._id !== id));
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) return;
     try {
-      await axios.delete(`/api/admin/users/${id}`, {
+      await API.delete(`/api/admin/users/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setUsers(users.filter(u => u._id !== id));

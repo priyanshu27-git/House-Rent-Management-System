@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../api";
 import PropertyCard from "../components/PropertyCard";
 import { Search, MapPin, DollarSign, Home, Filter, Loader2 } from "lucide-react";
 
@@ -17,7 +17,7 @@ const Properties = () => {
     setLoading(true);
     try {
       const params = new URLSearchParams(filters);
-      const res = await axios.get(`/api/properties?${params.toString()}`);
+      const res = await API.get(`/api/properties?${params.toString()}`);
       setProperties(res.data);
     } catch (err) {
       console.error(err);

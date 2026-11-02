@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import axios from "axios";
+import API from "../api";
 import { Search, Shield, Clock, ArrowRight, MapPin, Home as HomeIcon, Loader2 } from "lucide-react";
 
 const Home = () => {
@@ -14,7 +14,7 @@ const Home = () => {
   useEffect(() => {
     const fetchRecent = async () => {
       try {
-        const res = await axios.get("/api/properties");
+        const res = await API.get("/api/properties");
         // Only show the first 3 approved properties
         setRecentProperties(res.data.slice(0, 3));
       } catch (err) {

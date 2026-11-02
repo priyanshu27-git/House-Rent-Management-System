@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../api";
 import { useAuth } from "../Context/AuthContext";
 import { Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 
@@ -17,7 +17,7 @@ const Login = () => {
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post("/api/auth/login", { email, password });
+      const res = await API.post("/api/auth/login", { email, password });
       
       // 1. Destructure the token and user from the response
       const { token, user } = res.data;

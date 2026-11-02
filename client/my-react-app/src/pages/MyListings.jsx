@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../api";
 import { Link } from "react-router-dom";
 import { Home, MapPin, Trash2, CheckCircle, Clock, Loader2, Plus, ExternalLink } from "lucide-react";
 
@@ -13,7 +13,7 @@ const MyListings = () => {
 
   const fetchMyListings = async () => {
     try {
-      const res = await axios.get("/api/properties/my-listings", {
+      const res = await API.get("/api/properties/my-listings", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setListings(res.data);
@@ -31,7 +31,7 @@ const MyListings = () => {
     
     if (!window.confirm("Delete this property and all its images from Supabase?")) return;
     try {
-      await axios.delete(`/api/properties/${id}`, {
+      await API.delete(`/api/properties/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setListings(listings.filter(p => p._id !== id));

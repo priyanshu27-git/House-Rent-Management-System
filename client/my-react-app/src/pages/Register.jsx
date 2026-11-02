@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import API from "../api";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import { User, Mail, Lock, Phone, ArrowRight, Loader2 } from "lucide-react";
@@ -22,7 +22,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
   try {
-    const response = await axios.post("/api/auth/register", formData);
+    const response = await API.post("/api/auth/register", formData);
     
     // Extract both token and user from the backend response
     const { token, user } = response.data;

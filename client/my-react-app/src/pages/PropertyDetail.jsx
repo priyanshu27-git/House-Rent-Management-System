@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../api";
 import { useAuth } from "../Context/AuthContext";
 import {
   MapPin,
@@ -44,7 +44,7 @@ const PropertyDetail = () => {
 
       try {
         setLoading(true);
-        const res = await axios.get(`/api/properties/${id}`);
+        const res = await API.get(`/api/properties/${id}`);
         setProperty(res.data);
       } catch (err) {
         console.error("Fetch Error:", err);
@@ -65,7 +65,7 @@ const PropertyDetail = () => {
     setSending(true);
     try {
       // Backend: inquiryController.createInquiry
-      await axios.post("/api/inquiries", { propertyId: id, message: inquiry });
+      await API.post("/api/inquiries", { propertyId: id, message: inquiry });
       alert("Inquiry sent successfully to the owner!");
       setInquiry("");
     } catch (err) {
@@ -79,7 +79,7 @@ const PropertyDetail = () => {
     if (!user) return navigate("/login");
     try {
       // Backend: favoriteController.toggleFavorite (uses a POST for both add/remove)
-      const res = await axios.post(`/api/favorites/toggle`, { propertyId: id });
+      const res = await API.post(`/api/favorites/toggle`, { propertyId: id });
       setIsFavorited(res.data.isFavorite);
     } catch (err) {
       alert("Failed to update favorites");
@@ -91,7 +91,7 @@ const PropertyDetail = () => {
     if (!user) return navigate("/login");
     try {
       // Backend: complaintController.createComplaint
-      await axios.post("/api/complaints", {
+      await API.post("/api/complaints", {
         propertyId: id,
         subject: reportData.subject,
         message: reportData.message,

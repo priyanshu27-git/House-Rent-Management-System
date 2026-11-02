@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import API from "../api";
 import { MapPin, ArrowRight, Heart } from "lucide-react";
 
 const PropertyCard = ({ property }) => {
@@ -19,7 +19,7 @@ const PropertyCard = ({ property }) => {
       }
 
       // 2. Call your backend favorite toggle route
-      await axios.post(`/api/favorites/toggle/${property._id}`, {}, {
+      await API.post(`/api/favorites/toggle/${property._id}`, {}, {
   headers: { Authorization: `Bearer ${token}` }
 });
 

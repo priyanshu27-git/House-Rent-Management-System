@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../api";
 import { useAuth } from "../Context/AuthContext";
 import { Link } from "react-router-dom";
 import { 
@@ -29,18 +29,18 @@ const Dashboard = () => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
       const requests = [
-        axios.get("/api/inquiries/my", config)
+        API.get("/api/inquiries/my", config)
       ];
 
       if (user?.role === "owner") {
-        requests.push(axios.get(`/api/properties?ownerId=${user.id}&adminMode=true`, config));
+        requests.push(API.get(`/api/properties?ownerId=${user.id}&adminMode=true`, config));
       } else if (user?.role === "admin") {
-        requests.push(axios.get("/api/admin/users", config));
-        requests.push(axios.get("/api/properties?adminMode=true", config));
-        requests.push(axios.get("/api/admin/stats", config));
+        requests.push(API.get("/api/admin/users", config));
+        requests.push(API.get("/api/properties?adminMode=true", config));
+        requests.push(API.get("/api/admin/stats", config));
       } else if (user?.role === "tenant") {
         // FIX: Pointing to the consolidated route in favorite.js
-        requests.push(axios.get("/api/favorites", config));
+        requests.push(API.get("/api/favorites", config));
       }
 
       const results = await Promise.all(requests);
@@ -72,7 +72,7 @@ const Dashboard = () => {
 
   const handleApprove = async (id) => {
     try {
-      await axios.patch(`/api/admin/properties/${id}/approve`, {}, {
+      await API.patch(`/api/admin/properties/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       fetchData();
@@ -89,7 +89,7 @@ const Dashboard = () => {
   const handleDeleteProperty = async (id) => {
     if (!window.confirm("Delete this listing?")) return;
     try {
-      await axios.delete(`/api/properties/${id}`, {
+      await API.delete(`/api/properties/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       fetchData();

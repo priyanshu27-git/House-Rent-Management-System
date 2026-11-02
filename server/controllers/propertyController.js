@@ -11,9 +11,11 @@ export const getAllProperties = async (req, res) => {
     if (location && location.trim() !== "") {
       query.location = { $regex: location, $options: "i" };
     }
+    
     if (type && type !== "") {
       query.propertyType = type;
     }
+
     if (minPrice || maxPrice) {
       query.price = {};
       if (minPrice && minPrice !== "") query.price.$gte = Number(minPrice);

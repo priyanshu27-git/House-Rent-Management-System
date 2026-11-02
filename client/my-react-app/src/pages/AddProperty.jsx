@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../api";
 import { createClient } from "@supabase/supabase-js"; // 1. Added Supabase import
 import { useAuth } from "../Context/AuthContext";
 import { Upload, X, Plus, Loader2, MapPin, DollarSign, Home, FileText } from "lucide-react";
@@ -76,7 +76,7 @@ const handleSubmit = async (e) => {
 
       const finalData = { ...formData, images: imageUrls };
 
-      await axios.post("/api/properties", finalData, {
+      await API.post("/api/properties", finalData, {
         headers: { 
           "Content-Type": "application/json",
           "Authorization": `Bearer ${localStorage.getItem("token")}` 
