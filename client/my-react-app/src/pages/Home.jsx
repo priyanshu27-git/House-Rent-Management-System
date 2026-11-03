@@ -41,7 +41,7 @@ const Home = () => {
             // Updated URL with more stable parameters
             src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Hero Luxury House"
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover opacity-60 select-none pointer-events-none"
           />
         </div>
         

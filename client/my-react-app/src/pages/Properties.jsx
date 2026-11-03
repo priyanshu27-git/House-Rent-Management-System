@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useCallback} from "react";
+import { useSearchParams } from "react-router-dom";
 import API from "../api";
 import PropertyCard from "../components/PropertyCard";
 import { Search, MapPin, DollarSign, Home, Filter, Loader2 } from "lucide-react";
@@ -6,17 +7,18 @@ import { Search, MapPin, DollarSign, Home, Filter, Loader2 } from "lucide-react"
 const Properties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
   const [filters, setFilters] = useState({
-    location: "",
-    minPrice: "",
-    maxPrice: "",
-    type: "",
+    location: searchParams.get("location") || "",
+    minPrice: searchParams.get("minPrice") || "",
+    maxPrice: searchParams.get("maxPrice") || "",
+    type: searchParams.get("type") || "",
   });
 
-  const fetchProperties = async () => {
+  const fetchProperties = useCallback( async (filtersToApply) => {
     setLoading(true);
     try {
-      const params = new URLSearchParams(filters);
+      const params = new URLSearchParams(filtersToApply);
       const res = await API.get(`/api/properties?${params.toString()}`);
       setProperties(res.data);
     } catch (err) {
@@ -24,15 +26,32 @@ const Properties = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchProperties();
   }, []);
 
-  const handleFilterChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
+  useEffect(() => {
+  const urlFilters = {
+    location: searchParams.get("location") || "",
+    minPrice: searchParams.get("minPrice") || "",
+    maxPrice: searchParams.get("maxPrice") || "",
+    type: searchParams.get("type") || "",
   };
+
+  setFilters(urlFilters);
+  fetchProperties(urlFilters);
+
+}, [searchParams, fetchProperties]);
+
+
+
+  // handleFilterChange function
+  const handleFilterChange = (e) => {
+  const { name, value } = e.target;
+
+  setFilters((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
 
   return (
    // Inside Properties.jsx
@@ -111,9 +130,15 @@ const Properties = () => {
             <div className="flex items-end">
               <button 
                 onClick={() => {
-                  setFilters({ location: "", minPrice: "", maxPrice: "", type: "" });
+                  const emptyFilters = {
+                    location: "",
+                    minPrice: "",
+                    maxPrice: "",
+                    type: "",
+                  };
                   // Re-fetch after clearing
-                  setTimeout(fetchProperties, 0);
+                  setFilters(emptyFilters);
+                  fetchProperties(emptyFilters);
                 }}
                 className="w-full p-3 text-neutral-400 hover:text-red-500 text-xs font-bold transition-colors"
               >
