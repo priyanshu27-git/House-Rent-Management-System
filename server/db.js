@@ -7,7 +7,7 @@ dotenv.config();
 let MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI || MONGODB_URI.trim() === "") {
-  MONGODB_URI = "mongodb://localhost:27017/househunt";
+  MONGODB_URI = "mongodb+srv://househunt_deploy:DeploymentofHousehuntproject@cluster0.dxjc7qb.mongodb.net/househunt";
 }
 
 /**
