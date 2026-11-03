@@ -26,7 +26,7 @@ async function startServer() {
 
   // CORS configuration
   const allowedOrigins = [
-    process.env.CLIENT_URL,
+    process.env.CLIENT_URL?.trim().replace(/\/$/, ""),
     "http://localhost:5173",
   ].filter(Boolean);
 
