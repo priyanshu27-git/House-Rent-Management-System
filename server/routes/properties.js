@@ -7,8 +7,15 @@ const router = express.Router();
 // 1. Public route to view properties
 router.get("/", propertyController.getAllProperties);
 
+// Home route
+router.get("/home", propertyController.getAllProperties);
+
+
 // 2. Specific route for Owner's listings (MUST be above /:id)
 router.get("/my-listings", authenticate, propertyController.getMyProperties);
+
+// Favorites properties 
+router.get("/favorites/all", authenticate, propertyController.getMyFavorites);
 
 // 3. Get single property by ID
 router.get("/:id", propertyController.getPropertyById);
@@ -22,7 +29,6 @@ router.post(
 );
 
 // Favorites Routes
-router.get("/favorites/all", authenticate, propertyController.getMyFavorites);
 router.post("/favorites/:propertyId", authenticate, propertyController.toggleFavorite);
 
 // 5. Delete property (Includes Supabase cleanup)
