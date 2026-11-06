@@ -33,10 +33,10 @@ const Dashboard = () => {
       ];
 
       if (user?.role === "owner") {
-        requests.push(API.get(`/api/properties?ownerId=${user.id}&adminMode=true`, config));
+        requests.push(API.get("/api/properties/my-listings", config));
       } else if (user?.role === "admin") {
         requests.push(API.get("/api/admin/users", config));
-        requests.push(API.get("/api/properties?adminMode=true", config));
+        requests.push(API.get("/api/admin/properties", config));
         requests.push(API.get("/api/admin/stats", config));
       } else if (user?.role === "tenant") {
         // FIX: Pointing to the consolidated route in favorite.js

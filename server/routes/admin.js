@@ -9,6 +9,7 @@ router.use(authenticate, authorize(["admin"]));
 
 router.get("/stats", adminController.getStats);
 router.get("/users", adminController.getAllUsers);
+router.get("/properties", adminController.getAllProperties);
 router.delete("/users/:id", adminController.deleteUser);
 router.patch("/properties/:id/approve", adminController.approveProperty);
 

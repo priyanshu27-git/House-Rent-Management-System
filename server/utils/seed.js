@@ -9,6 +9,7 @@ export async function seedDB() {
   try {
     const userCount = await User.countDocuments();
     
+    
     // Check if DB is already seeded to prevent duplicates
     if (userCount === 0) {
       console.log("🚀 Starting database seeding...");

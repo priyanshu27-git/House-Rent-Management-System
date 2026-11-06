@@ -5,7 +5,7 @@ import { supabase } from "../config/supabase.js";
 export const getAllProperties = async (req, res) => {
   try {
     const { location, type, minPrice, maxPrice, adminMode } = req.query;
-    let query = (adminMode === 'true') ? {} : { isApproved: true };
+    let query = { isApproved: true };
 
     // 🛡️ Only add filters if the value is NOT an empty string or null
     if (location && location.trim() !== "") {
@@ -23,7 +23,6 @@ export const getAllProperties = async (req, res) => {
     }
 
     const properties = await Property.find(query).sort({ createdAt: -1 });
-    console.log(properties[0]);
     res.json(properties);
   } catch (error) {
     res.status(500).json({ message: error.message });

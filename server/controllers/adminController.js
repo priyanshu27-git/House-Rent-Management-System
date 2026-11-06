@@ -15,6 +15,18 @@ export const getStats = async (req, res) => {
   }
 };
 
+// GET all properties (Admin only)
+export const getAllProperties = async (req, res) => {
+  try {
+    const properties = await Property.find()
+      .sort({ createdAt: -1 });
+
+    res.json(properties);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // GET all users for management
 export const getAllUsers = async (req, res) => {
   try {

@@ -44,7 +44,7 @@ async function startServer() {
       success: true,
       message: "HouseHunt Backend is running",
     });
-  });
+  });   
 
   // API Routes
   app.use("/api/auth", authRoutes);

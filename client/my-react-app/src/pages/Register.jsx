@@ -15,7 +15,7 @@ const Register = () => {
     email: "",
     password: "",
     phone: "",
-    role: "tenant", // Matches our Backend enum: ["tenant", "owner", "admin"]
+    role: "tenant", // Matches our Backend enum: ["tenant", "owner"]
   });
 
 const handleSubmit = async (e) => {

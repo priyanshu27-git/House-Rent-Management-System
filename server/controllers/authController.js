@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/index.js";
 import { z } from "zod";
-
-const JWT_SECRET = process.env.JWT_SECRET || "househunt_secret_key";
+import crypto from "crypto";
+import { JWT_SECRET } from "../config/jwt.js";
 
 // Validation Schema
 const registerSchema = z.object({
@@ -11,7 +11,7 @@ const registerSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
   phone: z.string().optional(),
-  role: z.enum(["tenant", "owner", "admin"]).default("tenant"),
+  role: z.enum(["tenant", "owner"]).default("tenant"),
 });
 
 export const register = async (req, res) => {
@@ -44,9 +44,13 @@ export const register = async (req, res) => {
       token,
       user: { id: user._id, name, email, role, phone },
     });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  }  catch (error) {
+  console.error("Registration error:", error);
+
+  return res.status(500).json({
+    message: "Registration failed"
+  });
+}
 };
 
 export const login = async (req, res) => {

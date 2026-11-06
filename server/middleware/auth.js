@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET || "househunt_secret_key";
+import crypto from "crypto";
+import { JWT_SECRET } from "../config/jwt.js";
 
 /*
  * Middleware to verify the JWT token from the headers.
@@ -20,8 +20,13 @@ export const authenticate = (req, res, next) => {
     req.user = decoded; 
     next();
   } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
-  }
+  console.error("JWT Error Name:", error.name);
+  console.error("JWT Error Message:", error.message);
+
+  return res.status(401).json({
+    message: "Invalid token"
+  });
+}
 };
 
 /**

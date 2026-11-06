@@ -18,7 +18,7 @@ const AdminDashboard = () => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
       // 1. Fetch properties with adminMode=true to see Pending + Approved
-      const propsRes = await API.get("/api/properties?adminMode=true", config);
+      const propsRes = await API.get("/api/admin/properties", config);
       setProperties(propsRes.data);
       
       // 2. Fetch all users
