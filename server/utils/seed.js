@@ -8,13 +8,7 @@ import bcrypt from "bcryptjs";
 export async function seedDB() {
   try {
     const userCount = await User.countDocuments();
-    
-    
-    // Check if DB is already seeded to prevent duplicates
-    if (userCount === 0) {
-      console.log("🚀 Starting database seeding...");
-      
-      const hashedPassword = await bcrypt.hash("password123", 10);
+    const hashedPassword = await bcrypt.hash("password123", 10);
       
       // 1. Create Admin
       const admin = new User({
@@ -25,6 +19,13 @@ export async function seedDB() {
         phone: "1234567890"
       });
       await admin.save();
+    
+    
+    // Check if DB is already seeded to prevent duplicates
+    if (userCount === 0) {
+      console.log("🚀 Starting database seeding...");
+      
+      
       
       // 2. Create Owner
       const owner = new User({
