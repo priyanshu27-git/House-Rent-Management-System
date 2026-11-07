@@ -1,5 +1,6 @@
 import { Property, User } from "../models/index.js";
 import { supabase } from "../config/supabase.js";
+import mongoose from "mongoose";
 
 // GET all properties with basic filtering
 export const getAllProperties = async (req, res) => {
@@ -51,6 +52,62 @@ export const createProperty = async (req, res) => {
   }
 };
 
+
+// Update an existing property
+export const updateProperty = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid property ID" });
+    }
+
+    const property = await Property.findById(id);
+
+    if (!property) {
+      return res.status(404).json({ message: "Property not found" });
+    }
+
+    // Only the owner or admin can update
+    if (
+      property.ownerId.toString() !== req.user.id &&
+      req.user.role !== "admin"
+    ) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const allowedFields = [
+      "title",
+      "description",
+      "price",
+      "location",
+      "propertyType",
+      "images",
+    ];
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        property[field] = req.body[field];
+      }
+    });
+
+    // Any owner edit requires fresh admin approval
+    if (req.user.role !== "admin") {
+      property.isApproved = false;
+    }
+
+    await property.save();
+
+    res.status(200).json({
+      message: "Property updated successfully",
+      property,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 export const deleteProperty = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
@@ -62,7 +119,7 @@ export const deleteProperty = async (req, res) => {
     }
 
     // 2. Extract filenames from Supabase URLs to delete from Storage
-    // Example URL: .../public/Data/property_images/171000-house.jpg
+    // Example URL: .../public/properties/property_images/171000-house.jpg
     const filesToDelete = property.images.map(url => {
       const parts = url.split('/');
       return `property_images/${parts[parts.length - 1]}`;
@@ -70,7 +127,7 @@ export const deleteProperty = async (req, res) => {
 
     if (filesToDelete.length > 0) {
       const { error: storageError } = await supabase.storage
-        .from('Data')
+        .from('properties')
         .remove(filesToDelete);
       
       if (storageError) console.error("Supabase cleanup failed:", storageError);
@@ -109,30 +166,57 @@ export const getPropertyById = async (req, res) => {
 // Toggle Favorite: Add or Remove property from user's list
 export const toggleFavorite = async (req, res) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
     const { propertyId } = req.params;
 
+    if (!mongoose.isValidObjectId(propertyId)) {
+      return res.status(400).json({
+        message: "Invalid property ID"
+      });
+    }
+
+    const property = await Property.findById(propertyId);
+
+    if (!property) {
+      return res.status(404).json({
+        message: "Property not found"
+      });
+    }
+
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
 
-    // FIX: Check if the string version of the ID exists in the favorites array
-    const index = user.favorites.indexOf(propertyId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
 
-    if (index > -1) {
-      // If it exists, remove it
-      user.favorites.splice(index, 1);
+    const alreadyFavorite = user.favorites.some(
+      id => id.toString() === propertyId
+    );
+
+    if (alreadyFavorite) {
+      user.favorites = user.favorites.filter(
+        id => id.toString() !== propertyId
+      );
     } else {
-      // If it doesn't, add it
       user.favorites.push(propertyId);
     }
 
     await user.save();
-    res.json({ 
-      message: index > -1 ? "Removed from favorites" : "Added to favorites", 
-      favorites: user.favorites 
+
+    res.status(200).json({
+      message: alreadyFavorite
+        ? "Removed from favorites"
+        : "Added to favorites",
+      isFavorite: !alreadyFavorite
     });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Toggle favorite error:", error);
+    res.status(500).json({
+      message: "Failed to update favorites"
+    });
   }
 };
 

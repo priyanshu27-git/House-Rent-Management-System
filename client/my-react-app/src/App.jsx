@@ -35,10 +35,10 @@ const AppContent = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/properties" element={<Properties />} />
           <Route path="/properties/:id" element={<PropertyDetail />} />
-          <Route element={<AdminRoute />}></Route>
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route element={<AdminRoute />}>
+              <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              </Route>
           <Route path="/my-listings" element={<MyListings />} />
-          <Route path="/properties/:id" element={<PropertyDetail />} />
           <Route 
             path="/add-property" 
             element={

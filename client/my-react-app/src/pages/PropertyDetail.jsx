@@ -79,8 +79,8 @@ const PropertyDetail = () => {
     if (!user) return navigate("/login");
     try {
       // Backend: favoriteController.toggleFavorite (uses a POST for both add/remove)
-      const res = await API.post(`/api/favorites/toggle`, { propertyId: id });
-      setIsFavorited(res.data.isFavorite);
+      const res = await API.post(`/api/favorites/toggle/${id}`);
+      setIsFavorited(res.data.favorites?.some((item) => String(item._id || item) === String(id)) ?? !isFavorited);
     } catch (err) {
       alert("Failed to update favorites");
     }

@@ -13,8 +13,9 @@ router.get("/home", propertyController.getAllProperties);
 // 2. Specific route for Owner's listings (MUST be above /:id)
 router.get("/my-listings", authenticate, propertyController.getMyProperties);
 
-// Favorites properties 
-router.get("/favorites/all", authenticate, propertyController.getMyFavorites);
+// Update property
+router.put("/:id", authenticate, propertyController.updateProperty);
+
 
 // 3. Get single property by ID
 router.get("/:id", propertyController.getPropertyById);
@@ -26,9 +27,6 @@ router.post(
   authorize(["owner", "admin"]), 
   propertyController.createProperty
 );
-
-// Favorites Routes
-router.post("/favorites/:propertyId", authenticate, propertyController.toggleFavorite);
 
 // 5. Delete property (Includes Supabase cleanup)
 router.delete("/:id", authenticate, propertyController.deleteProperty);
