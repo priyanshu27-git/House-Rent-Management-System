@@ -9,7 +9,7 @@ router.get("/", propertyController.getAllProperties);
 
 // Home route
 router.get("/home", propertyController.getAllProperties);
-
+  
 // 2. Specific route for Owner's listings (MUST be above /:id)
 router.get("/my-listings", authenticate, propertyController.getMyProperties);
 
