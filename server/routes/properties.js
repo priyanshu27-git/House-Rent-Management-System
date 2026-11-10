@@ -16,7 +16,6 @@ router.get("/my-listings", authenticate, propertyController.getMyProperties);
 // Update property
 router.put("/:id", authenticate, propertyController.updateProperty);
 
-
 // 3. Get single property by ID
 router.get("/:id", propertyController.getPropertyById);
 

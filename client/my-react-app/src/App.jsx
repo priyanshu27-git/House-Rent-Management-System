@@ -47,6 +47,7 @@ const AppContent = () => {
               </ProtectedRoute>
             } 
           />
+          <Route path="/edit-property/:id" element={<AddProperty />} />
           
           <Route 
             path="/dashboard" 
